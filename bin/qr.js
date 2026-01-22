@@ -3,33 +3,60 @@
 import qr from "qr-image";
 import fs from "fs";
 import { URL } from "url";
+import inquirer from "inquirer";
 
-const inputUrl = process.argv[2];
-
-if (!inputUrl) {
-  console.error("❌ Please provide a URL");
-  console.log("Usage: qr <url>");
-  process.exit(1);
-}
-
+// Extract safe filename (no .com, .in, etc.)
 function extractName(url) {
   const parsed = new URL(url);
   return parsed.hostname.split(".")[0];
 }
 
-let name;
-try {
-  name = extractName(inputUrl);
-} catch {
-  console.error("❌ Invalid URL format");
-  process.exit(1);
+// Generate QR + save files
+function generateQR(inputUrl) {
+  let name;
+
+  try {
+    name = extractName(inputUrl);
+  } catch {
+    console.error("❌ Invalid URL format");
+    process.exit(1);
+  }
+
+  const qrImg = qr.image(inputUrl, { type: "png" });
+  qrImg.pipe(fs.createWriteStream(`${name}.png`));
+
+  fs.writeFile(`${name}.txt`, inputUrl, (err) => {
+    if (err) throw err;
+    console.log(`✅ Generated: ${name}.png`);
+    console.log(`📄 Saved: ${name}.txt`);
+  });
 }
 
-const qrImg = qr.image(inputUrl, { type: "png" });
-qrImg.pipe(fs.createWriteStream(`${name}.png`));
+// Main logic
+const argUrl = process.argv[2];
 
-fs.writeFile(`${name}.txt`, inputUrl, (err) => {
-  if (err) throw err;
-  console.log(`✅ Generated: ${name}.png`);
-  console.log(`📄 Saved: ${name}.txt`);
-});
+if (argUrl) {
+  // Direct usage: qr <url>
+  generateQR(argUrl);
+} else {
+  // Interactive fallback: qr
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "url",
+        message: "Enter the URL:",
+        validate(input) {
+          try {
+            new URL(input);
+            return true;
+          } catch {
+            return "Please enter a valid URL";
+          }
+        }
+      }
+    ])
+    .then((answers) => {
+      generateQR(answers.url);
+    });
+}
