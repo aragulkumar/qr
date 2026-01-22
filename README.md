@@ -99,11 +99,14 @@ google-1.png
 
 Contributions are welcome!
 
-1. Fork the repository
-2. Create a branch: `git checkout -b contribution/feature-name`
-3. Commit your changes: `git commit -m "add feature-name"`
-4. Push to your branch: `git push origin contribution/feature-name`
-5. Open a pull request
+ - Fork the repository
+ - Create a branch: 
+`git checkout -b contribution/feature-name`
+ -  Commit your changes: 
+`git commit -m "add feature-name"`
+ - Push to your branch: 
+`git push origin contribution/feature-name`
+ - Open a pull request
 
 Please keep changes focused and well-documented.
 
