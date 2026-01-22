@@ -1,0 +1,26 @@
+{
+  "name": "qr-cli",
+  "version": "1.0.0",
+  "description": "url to qr oneline command generator",
+  "keywords": [
+    "cli"
+  ],
+  "homepage": "https://github.com/aragulkumar/qr#readme",
+  "bugs": {
+    "url": "https://github.com/aragulkumar/qr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aragulkumar/qr.git"
+  },
+  "license": "ISC",
+  "author": "Ragul Kumar A",
+  "type": "module",
+  "main": "bin",
+  "bin": {
+    "qr-cli": "bin/qr.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
