@@ -1,9 +1,13 @@
 {
-  "name": "qr-cli",
+  "name": "qr",
   "version": "1.0.0",
-  "description": "url to qr oneline command generator",
+  "description": "A CLI tool to generate QR codes from URLs using a single command",
   "keywords": [
-    "cli"
+    "cli",
+    "qrcode",
+    "qr",
+    "nodejs",
+    "terminal"
   ],
   "homepage": "https://github.com/aragulkumar/qr#readme",
   "bugs": {
@@ -13,14 +17,16 @@
     "type": "git",
     "url": "git+https://github.com/aragulkumar/qr.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "Ragul Kumar A",
   "type": "module",
-  "main": "bin",
   "bin": {
-    "qr-cli": "bin/qr.js"
+    "qr": "./bin/qr.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "qr-image": "^3.2.0"
   }
 }
