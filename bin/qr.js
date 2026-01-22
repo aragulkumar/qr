@@ -5,41 +5,75 @@ import fs from "fs";
 import { URL } from "url";
 import inquirer from "inquirer";
 
-// Extract safe filename (no .com, .in, etc.)
+// ---------- Helpers ----------
+
+// Extract smart default name
 function extractName(url) {
   const parsed = new URL(url);
-  return parsed.hostname.split(".")[0];
+  const parts = parsed.hostname.split(".");
+
+  while (["www", "m", "api"].includes(parts[0])) {
+    parts.shift();
+  }
+
+  return parts[0];
 }
 
-// Generate QR + save files
-function generateQR(inputUrl) {
-  let name;
+// Prevent overwriting files
+function getAvailableName(baseName) {
+  let name = baseName;
+  let counter = 1;
+
+  while (
+    fs.existsSync(`${name}.png`) ||
+    fs.existsSync(`${name}.txt`)
+  ) {
+    name = `${baseName}-${counter}`;
+    counter++;
+  }
+
+  return name;
+}
+
+// Generate QR + files
+function generateQR(inputUrl, customName) {
+  let baseName;
 
   try {
-    name = extractName(inputUrl);
+    baseName = customName || extractName(inputUrl);
   } catch {
     console.error("❌ Invalid URL format");
     process.exit(1);
   }
 
-  const qrImg = qr.image(inputUrl, { type: "png" });
-  qrImg.pipe(fs.createWriteStream(`${name}.png`));
+  const finalName = getAvailableName(baseName);
 
-  fs.writeFile(`${name}.txt`, inputUrl, (err) => {
+  const qrImg = qr.image(inputUrl, { type: "png" });
+  qrImg.pipe(fs.createWriteStream(`${finalName}.png`));
+
+  fs.writeFile(`${finalName}.txt`, inputUrl, (err) => {
     if (err) throw err;
-    console.log(`✅ Generated: ${name}.png`);
-    console.log(`📄 Saved: ${name}.txt`);
+    console.log(`✅ Generated: ${finalName}.png`);
+    console.log(`📄 Saved: ${finalName}.txt`);
   });
 }
 
-// Main logic
-const argUrl = process.argv[2];
+// ---------- CLI Parsing ----------
 
-if (argUrl) {
-  // Direct usage: qr <url>
-  generateQR(argUrl);
+const args = process.argv.slice(2);
+const urlArg = args.find(arg => !arg.startsWith("--"));
+
+const nameIndex = args.indexOf("--name");
+const customName =
+  nameIndex !== -1 && args[nameIndex + 1]
+    ? args[nameIndex + 1]
+    : null;
+
+// ---------- Main Flow ----------
+
+if (urlArg) {
+  generateQR(urlArg, customName);
 } else {
-  // Interactive fallback: qr
   inquirer
     .prompt([
       {
@@ -54,9 +88,18 @@ if (argUrl) {
             return "Please enter a valid URL";
           }
         }
+      },
+      {
+        type: "input",
+        name: "name",
+        message: "Custom name (optional):",
+        filter(input) {
+          return input.trim() || null;
+        }
       }
     ])
     .then((answers) => {
-      generateQR(answers.url);
+      generateQR(answers.url, answers.name);
     });
 }
+
