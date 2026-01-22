@@ -101,11 +101,11 @@ Contributions are welcome!
 
  - Fork the repository
  - Create a branch: 
-`git checkout -b contribution/feature-name`
+```git checkout -b contribution/feature-name```
  -  Commit your changes: 
-`git commit -m "add feature-name"`
+```git commit -m "add feature-name"```
  - Push to your branch: 
-`git push origin contribution/feature-name`
+```git push origin contribution/feature-name```
  - Open a pull request
 
 Please keep changes focused and well-documented.
