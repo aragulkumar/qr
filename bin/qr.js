@@ -103,3 +103,4 @@ if (urlArg) {
     });
 }
 
+// New update available
