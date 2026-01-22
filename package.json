@@ -1,33 +1,16 @@
 {
-  "name": "qr",
+  "name": "@aragulkumar/qr",
   "version": "1.0.0",
-  "description": "A CLI tool to generate QR codes from URLs using a single command",
-  "keywords": [
-    "cli",
-    "qrcode",
-    "qr",
-    "nodejs",
-    "terminal"
-  ],
-  "homepage": "https://github.com/aragulkumar/qr#readme",
-  "bugs": {
-    "url": "https://github.com/aragulkumar/qr/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aragulkumar/qr.git"
-  },
-  "license": "MIT",
-  "author": "Ragul Kumar A",
+  "description": "CLI tool to generate QR codes from URLs",
   "type": "module",
   "bin": {
-    "qr": "./bin/qr.js"
+    "qr": "bin/qr.js"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "files": [
+    "bin"
+  ],
   "dependencies": {
-    "inquirer": "^13.2.1",
-    "qr-image": "^3.2.0"
+    "qr-image": "^3.2.0",
+    "inquirer": "^9.2.0"
   }
 }
